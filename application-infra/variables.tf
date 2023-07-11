@@ -8,6 +8,7 @@ variable "resource_name_prefix" {
 
 variable "storage_account_name" {
   type = string
+  default = "aztfworkshopsa45"
 }
 # Tags
 variable "default_tags" {
