@@ -29,7 +29,7 @@ stages:
               command: 'init'
               backendServiceArm: 'azure-terraform-workshop'
               backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa65'
               backendAzureRmContainerName: 'infrastructure'
               backendAzureRmKey: terraform.tfstate
               workingDirectory: application-infra
@@ -68,7 +68,7 @@ stages:
   #             command: 'init'
   #             backendServiceArm: 'azure-terraform-workshop'
   #             backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-  #             backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+  #             backendAzureRmStorageAccountName: 'aztfworkshopsa65'
   #             backendAzureRmContainerName: 'infrastructure'
   #             backendAzureRmKey: terraform.tfstate
   #             workingDirectory: application-infra
@@ -79,7 +79,7 @@ stages:
   #             command: 'plan'
   #             backendServiceArm: 'azure-terraform-workshop'
   #             backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-  #             backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+  #             backendAzureRmStorageAccountName: 'aztfworkshopsa65'
   #             backendAzureRmContainerName: 'infrastructure'
   #             backendAzureRmKey: terraform.tfstate
   #             workingDirectory: application-infra
@@ -122,7 +122,7 @@ stages:
               command: 'init'
               backendServiceArm: 'azure-terraform-workshop'
               backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa65'
               backendAzureRmContainerName: 'infrastructure'
               backendAzureRmKey: terraform.tfstate
               workingDirectory: application-infra
@@ -133,7 +133,7 @@ stages:
               command: 'plan'
               backendServiceArm: 'azure-terraform-workshop'
               backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa65'
               backendAzureRmContainerName: 'infrastructure'
               backendAzureRmKey: terraform.tfstate
               workingDirectory: application-infra
@@ -172,7 +172,7 @@ stages:
               command: 'init'
               backendServiceArm: 'azure-terraform-workshop'
               backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa65'
               backendAzureRmContainerName: 'infrastructure'
               backendAzureRmKey: terraform.tfstate
               workingDirectory: application-infra
@@ -186,7 +186,7 @@ stages:
               allowTelemetryCollection: false                            
               backendServiceArm: 'azure-terraform-workshop'
               backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
-              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa65'
               backendAzureRmContainerName: 'infrastructure'
               backendAzureRmKey: terraform.tfstate
               workingDirectory: application-infra
