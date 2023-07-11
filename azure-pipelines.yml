@@ -1,0 +1,194 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+     - application-infra
+     - azure-pipelines.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: TerraformCodeAnalysis
+    displayName: Terraform Code Analysis
+    dependsOn: []
+    jobs:
+      - job: TerraformCodeAnalysis
+        displayName: "Terraform Code Analysis"
+        dependsOn: []
+        steps:
+          - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+            displayName: install terraform
+            inputs:
+              terraformVersion: 1.5.0
+          - task: TerraformTaskV3@3
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+          - script: |
+              sudo apt update && sudo apt install curl unzip -y
+              curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+              tflint --init
+              curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+            workingDirectory: application-infra
+            displayName: "Install Dependencies"
+          - script: tflint && terraform fmt && terraform validate
+            workingDirectory: application-infra
+            displayName: "Terraform lint"
+          - script: tfsec -m low -s # We are suppressing the errors with -s flag temporary
+            workingDirectory: application-infra
+            displayName: "Terraform Static Security Analysis"
+
+  # STAGE: Terraform Compliance
+  - stage: TerraformComplianceCheck
+    displayName: Terraform Compliance Check
+    dependsOn: ["TerraformCodeAnalysis"]
+    jobs:
+      - job: TerraformComplianceCheck
+        displayName: "Terraform Compliance Check"
+        dependsOn: []
+        steps:
+          - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: 1.5.0
+
+          - task: TerraformTaskV3@3
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+          - task: TerraformTaskV3@3
+            displayName: Terraform Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+              environmentServiceNameAzureRM: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+
+          - task: UsePythonVersion@0
+            displayName: Use Python v3.9
+            inputs:
+              versionSpec: '3.9'
+              architecture: 'x64'
+
+          - script: |
+              python -m venv venv
+              source venv/bin/activate
+              python -m pip install --upgrade pip
+              pip install terraform-compliance
+            displayName: 'Install Python Dependencies'
+           
+          # - script: |
+          #     source venv/bin/activate
+          #     cd application-infra
+          #     terraform-compliance -f tests -p plan.out 
+          #   displayName: 'Run Terraform Compliance Check'
+
+  - stage: TerraformPlan
+    displayName: Terraform Plan
+    dependsOn: ["TerraformComplianceCheck"]
+    jobs:
+      - job: TerraformPlan
+        displayName: "Terraform Plan"
+        steps:
+          - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+            displayName: install terraform
+            inputs:
+              terraformVersion: 1.5.0
+          - task: TerraformTaskV3@3
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+          - task: TerraformTaskV3@3
+            displayName: Terraform Plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+              environmentServiceNameAzureRM: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+  - stage: ProvisionApproval
+    displayName: Approve to Provision
+    dependsOn: ["TerraformPlan"]
+    jobs:
+      - job: waitForValidation
+        displayName: Wait for external validation
+        pool: server
+        timeoutInMinutes: 4320 # job times out in 3 days
+        steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1440 # task times out in 1 day
+          inputs:
+            notifyUsers: |
+              abhishek.rajput@armakuni.com
+            instructions: 'Please validate the build configuration and resume'
+            onTimeout: 'resume'
+  - stage: TerraformApply
+    displayName: Terraform Apply
+    dependsOn: ["ProvisionApproval"]
+    jobs:
+      - job: TerraformApply
+        displayName: "Terraform Apply"
+        steps:
+          - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+            displayName: install terraform
+            inputs:
+              terraformVersion: 1.5.0
+          - task: TerraformTaskV3@3
+            displayName: Terraform Init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+          - task: TerraformCLI@0
+            displayName: Terraform Apply
+            inputs:
+              command: 'apply'
+              commandOptions: "-var domain_join_user=$(DOMAIN_JOIN_USER) -var domain_join_password=$(DOMAIN_JOIN_PASSWORD)"
+              backendType: azurerm
+              environmentServiceName: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              runAzLogin: true
+              allowTelemetryCollection: false                            
+              backendServiceArm: 'armakuni-azure-terraform-workshop-9f7973b5-b3ca-4f0a-9bb0-b87ef3fd16e8'
+              backendAzureRmResourceGroupName: 'azure-terraform-workshop-app-rg'
+              backendAzureRmStorageAccountName: 'aztfworkshopsa45'
+              backendAzureRmContainerName: 'infrastructure'
+              backendAzureRmKey: terraform.tfstate
+              workingDirectory: application-infra
+ 
