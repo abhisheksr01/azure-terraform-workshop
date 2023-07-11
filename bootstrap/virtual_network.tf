@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.resource_name_prefix}_app_rg"
+  name     = "${var.resource_name_prefix}-${var.name_initials}-app-rg"
   location = var.location
 }
 
 # Create virtual network
 resource "azurerm_virtual_network" "my_terraform_network" {
-  name                = "${var.resource_name_prefix}_vnet"
+  name                = "${var.resource_name_prefix}-${var.name_initials}-vnet"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -14,7 +14,7 @@ resource "azurerm_virtual_network" "my_terraform_network" {
 
 # Create subnet
 resource "azurerm_subnet" "my_terraform_subnet" {
-  name                 = "${var.resource_name_prefix}_subnet"
+  name                 = "${var.resource_name_prefix}-${var.name_initials}-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.my_terraform_network.name
   address_prefixes     = ["10.0.1.0/24"]
@@ -22,7 +22,7 @@ resource "azurerm_subnet" "my_terraform_subnet" {
 
 # Create public IPs
 resource "azurerm_public_ip" "my_terraform_public_ip" {
-  name                = "${var.resource_name_prefix}_public_ip"
+  name                = "${var.resource_name_prefix}-${var.name_initials}public-ip"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -31,7 +31,7 @@ resource "azurerm_public_ip" "my_terraform_public_ip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "my_terraform_nsg" {
-  name                = "${var.resource_name_prefix}_sg"
+  name                = "${var.resource_name_prefix}-${var.name_initials}-sg"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -77,7 +77,7 @@ resource "azurerm_network_security_group" "my_terraform_nsg" {
 
 # Create network interface
 resource "azurerm_network_interface" "my_terraform_nic" {
-  name                = "${var.resource_name_prefix}_nic"
+  name                = "${var.resource_name_prefix}-${var.name_initials}-nic"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 

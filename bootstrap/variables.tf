@@ -1,3 +1,7 @@
+variable "name_initials" {
+  type    = string
+  default = "abhi"
+}
 variable "subscription_id" {
   type = string
 }
@@ -10,8 +14,6 @@ variable "infrabackend_storage_account_name" {
   type = string
 }
 
-#  
-# aws iam create-login-profile --user-name tempadmin --password MyUser1Login8P@ssword
 variable "infrabackend_storage_account_container_names" {
   type = set(string)
 }
