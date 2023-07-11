@@ -180,7 +180,6 @@ stages:
             displayName: Terraform Apply
             inputs:
               command: 'apply'
-              commandOptions: "-var domain_join_user=$(DOMAIN_JOIN_USER) -var domain_join_password=$(DOMAIN_JOIN_PASSWORD)"
               backendType: azurerm
               environmentServiceName: 'azure-terraform-workshop'
               runAzLogin: true
