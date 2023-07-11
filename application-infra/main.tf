@@ -1,11 +1,6 @@
 terraform {
   required_version = "1.5.0"
-  # backend "azurerm" {
-  #   resource_group_name  = "abhishek_bootstrap_rg"
-  #   storage_account_name = "abhishekdemo"
-  #   container_name       = "infrastructure"
-  #   key                  = "terraform.tfstate"
-  # }
+  backend "azurerm" {}
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -15,7 +10,7 @@ terraform {
       source  = "hashicorp/null"
       version = "=3.2.1"
     }
-    template = "~> 2.0"
+    # template = "~> 2.0"
   }
 }
 

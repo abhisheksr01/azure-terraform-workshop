@@ -1,8 +1,16 @@
+data "azurerm_resource_group" "azure_terraform_workshop_rg" {
+  name = "${var.resource_name_prefix}-app-rg"
+}
+
+data "azurerm_network_interface" "my_terraform_nic" {
+  name                = "${var.resource_name_prefix}-nic"
+  resource_group_name = data.azurerm_resource_group.azure_terraform_workshop_rg.name
+}
 resource "azurerm_linux_virtual_machine" "linux_vm" {
   name                            = "abhishek_demo_vm"
-  location                        = azurerm_resource_group.rg.location
-  resource_group_name             = azurerm_resource_group.rg.name
-  network_interface_ids           = [azurerm_network_interface.my_terraform_nic.id]
+  location                        = data.azurerm_resource_group.azure_terraform_workshop_rg.location
+  resource_group_name             = data.azurerm_resource_group.azure_terraform_workshop_rg.name
+  network_interface_ids           = [data.azurerm_network_interface.my_terraform_nic.id]
   size                            = "Standard_DS1_v2"
   computer_name                   = "HUKHANQQ2"
   admin_username                  = "hukadmin"
@@ -51,7 +59,7 @@ resource "azurerm_virtual_machine_extension" "linux_vm_ext" {
 
 resource "azurerm_storage_blob" "linux_cse_blob" {
   name                   = "linux_cse.sh"
-  storage_account_name   = "abhishekdemo"
+  storage_account_name   = var.storage_account_name
   storage_container_name = "infrastructure"
   type                   = "Block"
   source                 = "./linux_cse.sh"
@@ -59,6 +67,6 @@ resource "azurerm_storage_blob" "linux_cse_blob" {
 }
 
 data "azurerm_storage_account" "blobstorage" {
-  name                = "abhishekdemo"
-  resource_group_name = "abhishek_bootstrap_rg"
+  name                = var.storage_account_name
+  resource_group_name = data.azurerm_resource_group.azure_terraform_workshop_rg.name
 }

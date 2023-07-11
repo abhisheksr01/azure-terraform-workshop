@@ -10,6 +10,9 @@ variable "location" {
   type = string
 }
 
+variable "storage_account_name" {
+  type = string
+}
 # Tags
 variable "default_tags" {
   type = object({
@@ -23,7 +26,7 @@ variable "default_tags" {
   default = {
     Owner       = "Abhishek"
     Team        = "Modern Engineering Practise"
-    Description = "Resources for Hachtte Lunch and learn"
+    Description = "Resources for Azure Terraform workshop"
     Environment = "DEMO"
     Provisioner = "Terraform"
     CostCode    = "1000-550"
