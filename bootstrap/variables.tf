@@ -10,6 +10,8 @@ variable "infrabackend_storage_account_name" {
   type = string
 }
 
+#  
+# aws iam create-login-profile --user-name tempadmin --password MyUser1Login8P@ssword
 variable "infrabackend_storage_account_container_names" {
   type = set(string)
 }
@@ -38,8 +40,8 @@ variable "default_tags" {
   })
   default = {
     Owner       = "Abhishek"
-    Team        = "Azure Terraform Learning - abhisheksr01"
-    Description = "Resources for Azure Terraform Learning"
+    Team        = "Azure Terraform workshop - abhisheksr01"
+    Description = "Resources for Azure Terraform workshop"
     Environment = "Dev"
     Provisioner = "Terraform"
     CostCode    = "100-101" # Random value very useful for billing purposes.
