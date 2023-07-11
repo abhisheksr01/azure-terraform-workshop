@@ -1,7 +1,3 @@
-variable "name_initials" {
-  type    = string
-  default = "abhi"
-}
 variable "subscription_id" {
   type = string
 }

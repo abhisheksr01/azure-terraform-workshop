@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "infrabackend" {
-  name                     = "${var.infrabackend_storage_account_name}${var.name_initials}"
-  resource_group_name      = azurerm_resource_group.azure_bootstrap_rg.name
-  location                 = azurerm_resource_group.azure_bootstrap_rg.location
+  name                     = "${var.infrabackend_storage_account_name}${random_id.storage_account_name_unique.hex}"
+  resource_group_name      = azurerm_resource_group.app_rg.name
+  location                 = azurerm_resource_group.app_rg.location
   account_tier             = var.storage_account_account_tier
   account_replication_type = var.storage_account_replication_type
 
@@ -13,4 +13,8 @@ resource "azurerm_storage_container" "infrabackend" {
   name                  = each.key
   storage_account_name  = azurerm_storage_account.infrabackend.name
   container_access_type = "private"
+}
+
+resource "random_id" "storage_account_name_unique" {
+  byte_length = 1
 }
