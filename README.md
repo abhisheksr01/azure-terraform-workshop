@@ -9,11 +9,18 @@ This repo has two sections:
 
 2. application-infra directory: 
 
-   Contains terraform code for provisioning a VM & associated infra components for deploying a simple application.
+   Contains terraform code for provisioning a VM & associated infrastructure components for deploying a simple application.
+
+## Setting up your workstation
+
+- Choose your preferred IDE (VSCode or IntelliJ) and install Terraform Plugin
+- Install [TFEnv](https://github.com/tfutils/tfenv) and ensure you have Terraform `1.5.0` version installed.
+  It's recommended that we lock the terraform version.
+  > Demo what will happen when developers uses different version of terraform cli.
 
 ## Setting Up Bootstrap Infrastructure
 
-Bootstrap Infrastructure refers to the essential infrastructure resources that are necessary during the initial provisioning phase and ideally remain unchanged or require infrequent modifications.
+Bootstrap Infrastructure refers to the essential infrastructure resources that are necessary during the initial provisioning phase and ideally remains unchanged or require infrequent modifications.
 
 ### What resources are considered as Bootstrap?
 
