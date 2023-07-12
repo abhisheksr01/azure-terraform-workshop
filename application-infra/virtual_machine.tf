@@ -6,6 +6,7 @@ data "azurerm_network_interface" "my_terraform_nic" {
   name                = "${var.resource_name_prefix}-nic"
   resource_group_name = data.azurerm_resource_group.azure_terraform_workshop_rg.name
 }
+
 resource "azurerm_linux_virtual_machine" "linux_vm" {
   name                            = "abhishek_demo_vm"
   location                        = data.azurerm_resource_group.azure_terraform_workshop_rg.location
@@ -18,7 +19,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   disable_password_authentication = false
 
   # Uncomment this line to delete the data disks automatically when deleting the VM
-  # delete_data_disks_on_termination = true
+  delete_data_disks_on_termination = true
 
   source_image_reference {
     publisher = "Canonical"
