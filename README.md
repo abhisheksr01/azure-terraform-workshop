@@ -99,3 +99,58 @@ In our scenario we would like to provision a small Ubuntu VM and using the `azur
   Once successfully executed you will see an `application_public_url` in the console output. Use the URL to access the application deployed in your newly provisioned VM.
 
 > Note: If you are running behind a Corporate proxy, VPN or firewall it's highly likely that access to the IP based URL's might be blocked.
+
+
+## terraform-best-practices
+An opinionated attempt to bring Terraform Best practices under a single umbrella.
+
+### Terraform Best Practices - 101
+
+- Use Version Control
+- TF Bootstrap
+- Organize Your Code
+- Use Variables
+- Use Output Values
+- Use Modules
+- Use Terraform Backend
+- Use Terraform Workspaces
+- Use Terraform Provider Versioning
+- Plan and Apply Separately
+
+### Advance Best Practices
+
+- Use Terraform Modules Wisely
+- Use Remote State Sharing
+- Automate Workflows with CI/CD
+- Implement Security Measures
+- Implement Infrastructure Testing
+- Implement Infrastructure Drift Detection
+- Leverage Remote Execution
+- Monitor and Alert on Infrastructure Changes
+- Implement a Disaster Recovery Plan
+- Regularly Update Terraform Versions
+
+### Terraform Security Best Practices
+
+- Use Least Privilege Principle
+- Secure Sensitive Information
+- Protect Terraform State
+- Apply Regular Updates
+- Validate External Modules
+- Practice Pair Programming
+- Enable Logging and Monitoring
+- Enable Two-Factor Authentication (2FA)
+- Regularly Audit and Review Resources
+- Educate and Train Your Team
+
+### Terraform Tools & Utilities
+
+- Terraform Validate
+- Terraform Graph
+- Terraform fmt
+- TFLint
+- TFsec
+- Terrascan
+- Terraform Compliance
+- Terraform Vulnerability scanning
+- Use AWS Nuke for Ephemeral Environments
