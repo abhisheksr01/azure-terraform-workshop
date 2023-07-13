@@ -127,6 +127,35 @@ In our scenario we would like to provision a small Ubuntu VM and using the `azur
 
 > Note: If you are running behind a Corporate proxy, VPN or firewall it's highly likely that access to the IP based URL's might be blocked.
 
+### Destroying Infrastructure
+
+  <b>Always make sure that you destroy the infrastructure (only while learning or practicing) at the end of the exercise to ensure you are not paying for left over resources.</b>
+
+  - Destroy `application-infra` resources
+    
+    From the application-infra directory execute below command and when prompted respond as `yes`:
+
+    ```
+    terraform destroy
+    ```
+
+    alternatively you can use below command without prompt
+    ```
+    terraform destroy --auto-approve
+    ```
+
+  - Destroy `bootstrap` resources
+  
+    From the bootstrap directory execute below command and when prompted respond as `yes`:
+    ```
+    terraform destroy
+    ```
+    alternatively you can use below command without prompt
+    ```
+    terraform destroy --auto-approve
+    ```
+
+    > You may get an error while trying to delete the bootstrap infrastructure because the storage account do not exist anymore where terraform was storing the remote state. Hence go to the portal and manually delete the leftover resources.
 
 ### Setting Up Azure DevOps Pipeline
     [Work in Progress]
