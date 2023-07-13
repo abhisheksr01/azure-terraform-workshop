@@ -18,9 +18,6 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   admin_password                  = "Password1234"
   disable_password_authentication = false
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
-
   source_image_reference {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-jammy"
